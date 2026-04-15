@@ -24,13 +24,8 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "remnawave-subscription-page.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
@@ -43,7 +38,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ if .Values.app.existingSecret }}{{ .Values.app.existingSecret }}{{ else }}{{ include "remnawave-subscription-page.fullname" . }}{{ end }}
-                  key: apiToken
+                  key: {{ .Values.app.apiTokenKey | default "apiToken" }}
           ports:
             - name: http
               containerPort: {{ .Values.app.port }}

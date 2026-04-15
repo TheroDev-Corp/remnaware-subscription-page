@@ -9,19 +9,7 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
-
 podAnnotations: {}
-podSecurityContext: {}
-
-securityContext: {}
 
 service:
   type: ClusterIP
@@ -49,12 +37,6 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-
 nodeSelector: {}
 tolerations: []
 affinity: {}
@@ -67,6 +49,8 @@ app:
   apiToken: "API_TOKEN_FROM_REMNAWAVE"
   # Alternatively, reference an existing secret
   existingSecret: ""
+  # Key inside the existing secret for the API token. Default is 'apiToken'.
+  apiTokenKey: "apiToken"
   
   # Optional: Serve at custom root path (e.g., 'sub'). Do not place / at start/end.
   customSubPrefix: ""

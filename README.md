@@ -49,7 +49,8 @@ The following table lists the configurable parameters of the Remnawave Subscript
 | `service.port` | Internal service port | `3010` |
 | `app.panelUrl` | URL of your Remnawave Panel | `https://panel.example.com` |
 | `app.apiToken` | API Token from Remnawave Dashboard | `""` |
-| `app.existingSecret` | Use an existing secret for the API Token | `""` |
+| `app.existingSecret` | Use an existing secret for variables | `""` |
+| `app.apiTokenKey` | Key for the API token in secret | `apiToken` |
 | `ingress.enabled` | Enable ingress controller resource | `false` |
 | `ingress.className` | Ingress class name (e.g., `traefik`) | `""` |
 | `ingress.hosts[0].host` | Hostname for the subscription page | `subscription.example.com` |
