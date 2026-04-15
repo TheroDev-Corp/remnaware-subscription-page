@@ -33,11 +33,12 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "remnawave-subscription-page.fullname" . }}
+            - secretRef:
+                name: {{ if .Values.app.existingSecret }}{{ .Values.app.existingSecret }}{{ else }}{{ include "remnawave-subscription-page.fullname" . }}{{ end }}
           env:
-            - name: APP_PORT
-              value: {{ .Values.app.port | quote }}
-            - name: REMNAWAVE_PANEL_URL
-              value: {{ .Values.app.panelUrl | quote }}
             - name: REMNAWAVE_API_TOKEN
               valueFrom:
                 secretKeyRef:

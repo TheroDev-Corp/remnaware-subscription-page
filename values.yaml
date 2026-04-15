@@ -67,3 +67,14 @@ app:
   apiToken: "API_TOKEN_FROM_REMNAWAVE"
   # Alternatively, reference an existing secret
   existingSecret: ""
+  
+  # Optional: Serve at custom root path (e.g., 'sub'). Do not place / at start/end.
+  customSubPrefix: ""
+  # Optional: Support Marzban legacy links
+  marzbanLegacyLinkEnabled: false
+  marzbanLegacySecretKey: ""
+  # Optional: Caddy auth API token if using 'Caddy with security' addon
+  caddyAuthApiToken: ""
+  # Optional: Cloudflare Zero Trust bypass
+  cloudflareZeroTrustClientId: ""
+  cloudflareZeroTrustClientSecret: ""

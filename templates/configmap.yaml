@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "remnawave-subscription-page.fullname" . }}
+  labels:
+    {{- include "remnawave-subscription-page.labels" . | nindent 4 }}
+data:
+  APP_PORT: {{ .Values.app.port | quote }}
+  REMNAWAVE_PANEL_URL: {{ .Values.app.panelUrl | quote }}
+  {{- if .Values.app.customSubPrefix }}
+  CUSTOM_SUB_PREFIX: {{ .Values.app.customSubPrefix | quote }}
+  {{- end }}
+  {{- if .Values.app.marzbanLegacyLinkEnabled }}
+  MARZBAN_LEGACY_LINK_ENABLED: {{ .Values.app.marzbanLegacyLinkEnabled | quote }}
+  {{- end }}
