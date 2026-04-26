@@ -47,10 +47,20 @@ spec:
             httpGet:
               path: /
               port: http
+              httpHeaders:
+                - name: X-Forwarded-Proto
+                  value: https
+                - name: X-Forwarded-For
+                  value: 127.0.0.1
           readinessProbe:
             httpGet:
               path: /
               port: http
+              httpHeaders:
+                - name: X-Forwarded-Proto
+                  value: https
+                - name: X-Forwarded-For
+                  value: 127.0.0.1
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
