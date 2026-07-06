@@ -51,7 +51,7 @@ app:
   existingSecret: ""
   # Key inside the existing secret for the API token. Default is 'apiToken'.
   apiTokenKey: "apiToken"
-  
+
   # Optional: Serve at custom root path (e.g., 'sub'). Do not place / at start/end.
   customSubPrefix: ""
   # Optional: Support Marzban legacy links
