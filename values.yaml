@@ -1,5 +1,8 @@
 replicaCount: 1
 
+autoscaling:
+  enabled: false
+
 image:
   repository: remnawave/subscription-page
   pullPolicy: IfNotPresent
@@ -10,6 +13,32 @@ nameOverride: ""
 fullnameOverride: ""
 
 podAnnotations: {}
+
+# Internal listener for health checks and metrics.
+# Only the Go backend (backend-go) has it; the upstream TS image does not,
+# so keep this disabled when running remnawave/subscription-page.
+internal:
+  enabled: false
+  port: 3011
+
+probes:
+  # With internal.enabled, probes use httpGet /healthz and /readyz on the
+  # internal port. Otherwise they fall back to tcpSocket on the app port.
+  liveness:
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    failureThreshold: 3
+  readiness:
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    failureThreshold: 3
+
+metrics:
+  # Requires internal.enabled. Exposes a "metrics" container/service port and
+  # adds prometheus.io/* pod annotations for annotation-based scrapers.
+  enabled: false
+  path: /metrics
+  podAnnotations: true
 
 service:
   type: ClusterIP

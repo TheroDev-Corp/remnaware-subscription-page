@@ -6,6 +6,9 @@ metadata:
     {{- include "remnawave-subscription-page.labels" . | nindent 4 }}
 data:
   APP_PORT: {{ .Values.app.port | quote }}
+  {{- if .Values.internal.enabled }}
+  INTERNAL_PORT: {{ .Values.internal.port | quote }}
+  {{- end }}
   REMNAWAVE_PANEL_URL: {{ .Values.app.panelUrl | quote }}
   {{- if .Values.app.customSubPrefix }}
   CUSTOM_SUB_PREFIX: {{ .Values.app.customSubPrefix | quote }}

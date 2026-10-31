@@ -13,9 +13,17 @@ spec:
       {{- include "remnawave-subscription-page.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- $metricsAnnotations := and .Values.internal.enabled .Values.metrics.enabled .Values.metrics.podAnnotations }}
+      {{- if or .Values.podAnnotations $metricsAnnotations }}
       annotations:
+        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- if $metricsAnnotations }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: {{ .Values.internal.port | quote }}
+        prometheus.io/path: {{ .Values.metrics.path | quote }}
+        {{- end }}
       {{- end }}
       labels:
         {{- include "remnawave-subscription-page.selectorLabels" . | nindent 8 }}
@@ -43,18 +51,31 @@ spec:
             - name: http
               containerPort: {{ .Values.app.port }}
               protocol: TCP
+            {{- if .Values.internal.enabled }}
+            - name: {{ if .Values.metrics.enabled }}metrics{{ else }}internal{{ end }}
+              containerPort: {{ .Values.internal.port }}
+              protocol: TCP
+            {{- end }}
           livenessProbe:
+            {{- if .Values.internal.enabled }}
+            httpGet:
+              path: /healthz
+              port: {{ .Values.internal.port }}
+            {{- else }}
             tcpSocket:
               port: http
-            initialDelaySeconds: 15
-            periodSeconds: 10
-            failureThreshold: 3
+            {{- end }}
+            {{- toYaml .Values.probes.liveness | nindent 12 }}
           readinessProbe:
+            {{- if .Values.internal.enabled }}
+            httpGet:
+              path: /readyz
+              port: {{ .Values.internal.port }}
+            {{- else }}
             tcpSocket:
               port: http
-            initialDelaySeconds: 10
-            periodSeconds: 10
-            failureThreshold: 3
+            {{- end }}
+            {{- toYaml .Values.probes.readiness | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

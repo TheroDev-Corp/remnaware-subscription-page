@@ -11,5 +11,11 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+    {{- if and .Values.internal.enabled .Values.metrics.enabled }}
+    - port: {{ .Values.internal.port }}
+      targetPort: metrics
+      protocol: TCP
+      name: metrics
+    {{- end }}
   selector:
     {{- include "remnawave-subscription-page.selectorLabels" . | nindent 4 }}
